@@ -11,6 +11,8 @@ int func(void * arg) {
 }
 
 int main(int argc, char * argv[]) {
+  //shared_i = mmap(NULL, sizeof(int) * MAX_WORKER, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+  worker = mmap(NULL, sizeof(struct bkworker_t) * MAX_WORKER, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
   int tid[15]; // Task ID
   int wid[15]; // Worker ID
   int id[15]; // Hello ID

@@ -22,6 +22,7 @@ void *bkwrk_worker(void *arg)
     int sig;
     int s;
     int i = *((int *)arg); // Default arg is integer of workid
+    
     struct bkworker_t *wrk = &worker[i];
     /* Taking the mask for waking up */
     sigemptyset(&set);
@@ -46,7 +47,9 @@ void *bkwrk_worker(void *arg)
 #endif
         //if(worker[i].func == NULL ) printf("H\n");
         /* Busy running */
-        if (wrk->func != NULL) wrk->func(wrk->arg);
+        if (wrk->func != NULL) {
+            wrk->func(wrk->arg); //printf("%d\n",*(int*)worker[0].arg);
+        }
         //printf("wrk-arg: %d\n", *((int *)wrk->arg));
 
         /* Advertise I DONE WORKING */
@@ -71,7 +74,7 @@ int bktask_assign_worker(unsigned int bktaskid, unsigned int wrkid)
     wrkid_busy[wrkid] = 1;
 
     worker[wrkid].func = tsk->func;
-    worker[wrkid].arg = tsk->arg;  printf("Arg for task %u: %d\n", bktaskid, *(int*)worker[wrkid].arg);
+    worker[wrkid].arg = tsk->arg;  printf("Arg for wrkid %u: %d\n", wrkid, *(int*)worker[wrkid].arg);
     worker[wrkid].bktaskid = bktaskid;
 
     printf("Assign tsk %d wrk %d \n", tsk->bktaskid, wrkid);
@@ -81,7 +84,7 @@ int bktask_assign_worker(unsigned int bktaskid, unsigned int wrkid)
 int bkwrk_create_worker()
 {
     unsigned int i;
-    worker = mmap(NULL, sizeof(struct bkworker_t) * MAX_WORKER, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    
 
     // Create shared memory segment
     for (i = 0; i < MAX_WORKER; i++)
@@ -121,10 +124,7 @@ int bkwrk_create_worker()
         sigprocmask(SIG_BLOCK, &set, NULL);
 
         pid_t pid = fork();
-        if (pid == 0)
-        {
-            bkwrk_worker(&i);
-        }
+        if (pid == 0) bkwrk_worker(&i);
         else if (pid > 0)
         {
             wrkid_tid[i] = pid;

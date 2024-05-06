@@ -2,7 +2,7 @@
 #define BKTPOOL_H
 
 #include <stdlib.h>
-
+#include <sys/mman.h>
 #include <pthread.h>
 
 #define MAX_WORKER 10
@@ -35,6 +35,7 @@ struct bkworker_t {
 
 //struct bkworker_t worker[MAX_WORKER];
 struct bkworker_t *worker;
+//int *shared_i;
 /* Prototype API */
 
 /* bktpool module */

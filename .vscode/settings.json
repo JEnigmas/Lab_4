@@ -60,6 +60,7 @@
     "*.rmd": "markdown",
     "*.html": "html",
     "mman.h": "c",
-    "syscall.h": "c"
+    "syscall.h": "c",
+    "ipc.h": "c"
   }
 }
