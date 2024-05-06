@@ -48,7 +48,7 @@ void *bkwrk_worker(void *arg)
         //if(worker[i].func == NULL ) printf("H\n");
         /* Busy running */
         if (wrk->func != NULL) {
-            wrk->func(wrk->arg); //printf("%d\n",*(int*)worker[0].arg);
+            wrk->func(wrk->arg); printf("%d\n",*(int*)worker[0].arg);
         }
         //printf("wrk-arg: %d\n", *((int *)wrk->arg));
 
